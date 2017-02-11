@@ -15,6 +15,8 @@ trait LinesService {
 
 class CachingLinesService @Inject()(cache: CacheApi) extends LinesService {
 
+  println("testing injection")
+
   // TODO: initialize lines cache using file from initialization
   /*
   //private val books = mutable.Map(
@@ -42,6 +44,6 @@ class CachingLinesService @Inject()(cache: CacheApi) extends LinesService {
     } catch {
         case e: NumberFormatException => None
     }
-    */    
+    */
   }
 }

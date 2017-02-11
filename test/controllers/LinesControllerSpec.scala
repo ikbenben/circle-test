@@ -73,5 +73,3 @@ class LinesControllerSpec extends PlaySpec with OneAppPerTest with MockitoSugar 
     }
   }
 }
-
-
