@@ -31,7 +31,6 @@ class LinesServicesSpec extends PlaySpec with OneAppPerTest with MockitoSugar wi
   val cacheKey = "line.2"
 
   before {
-    println("running beforeEach")
     cacheMock = mock[CacheApi]
     service = new CachingLinesService(cacheMock)
   }
@@ -52,11 +51,8 @@ class LinesServicesSpec extends PlaySpec with OneAppPerTest with MockitoSugar wi
    * this test is not working....can't get verify to work properly
    */
   "LinesService#loadData(filename: String)" should {
-    println("what is going on")
-
     "should read the file and populate the cache" in {
 
-      println("resetting mock and starting test")
       reset(cacheMock)
       service.loadData("dist/test.txt")
 

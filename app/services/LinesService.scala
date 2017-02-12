@@ -4,7 +4,7 @@ import scala.io.Source
 import java.io.{FileReader, FileNotFoundException, IOException}
 import resource._
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import play.api.cache.CacheApi
 
@@ -33,6 +33,7 @@ trait LinesService {
  *
  * Need to review Play / Guice DI documentation to get a better understanding of app startup
  */
+@Singleton
 class CachingLinesService @Inject()(cache: CacheApi) extends LinesService {
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
