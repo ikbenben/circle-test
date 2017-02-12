@@ -39,6 +39,7 @@ Peformance as the number of users grow could become a problem due to too many re
 * The cache initialization code could be updated to only parse the file if the supplied filename has changed from the last run. This would help offset the first request load time issue identified above so that it was not experienced across restarts
 * The cache initialization code could use some refactoring. See the comments in the LinesService.scala file for details
 * Using cache to store the entire contents of the file could be problematic if the number of rows in the file exceeds the cache size configuration. In this scenario, itemsitems will be expired from cache which will cause 413 exceptions when it shoudn't. Would be better to use a more persistent backend to store the entire contents such as a database.
+* Add caching headers to http response so requests are cached to decrease load on the servers as the number of users increase. This endpoint is idempotent so the response can be cached for long periods of time
 * Application should be returning a 404 response codes instead of 413 if the index does not exist. From w3, a 413 response code means
 > The server is refusing to process a request because the request entity is larger than the server is willing or able to process. The server MAY close the connection to prevent the client from continuing the request
 * Add end points to list all lines, create a new line, update an exisitng line or delete a line. modifications would update file appropriately
