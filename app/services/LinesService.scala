@@ -1,12 +1,15 @@
 package services
 
 import scala.io.Source
+import scala.collection.JavaConversions._
+
+import play.api.cache.CacheApi
+
 import java.io.{FileReader, FileNotFoundException, IOException}
-import resource._
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.cache.CacheApi
+import resource._
 
 import model.Line
 
@@ -61,7 +64,8 @@ class CachingLinesService @Inject()(cache: CacheApi) extends LinesService {
   }
 
   def filename: String = {
-    "dist/test.txt"
+    val properties = System.getProperties()
+    properties.get("config.linesfile").asInstanceOf[String]
   }
 
   def cacheKey(index: Long): String = {

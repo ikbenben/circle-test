@@ -17,10 +17,6 @@ import play.api.cache.CacheApi
 
 import model.Line
 
-/**
- *
- *
- */
 class LinesServicesSpec extends PlaySpec with OneAppPerTest with MockitoSugar with BeforeAndAfter {
 
   var cacheMock: CacheApi = _
@@ -36,7 +32,9 @@ class LinesServicesSpec extends PlaySpec with OneAppPerTest with MockitoSugar wi
   }
 
   "LinesService#filename" should {
-
+    "return the filename specified in the system property config.linesfile" in {
+      service.filename mustBe "dist/test.txt"
+    }
   }
 
   "LinesService#cacheKey(index: Long)" should {
@@ -46,8 +44,6 @@ class LinesServicesSpec extends PlaySpec with OneAppPerTest with MockitoSugar wi
   }
 
   /**
-   * test show method to ensure returning correct values
-   *
    * this test is not working....can't get verify to work properly
    */
   "LinesService#loadData(filename: String)" should {

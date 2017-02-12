@@ -14,10 +14,6 @@ import org.mockito.Mockito._
 import services.LinesService
 import model.Line
 
-/**
- *
- *
- */
 class LinesControllerSpec extends PlaySpec with OneAppPerTest with MockitoSugar with BeforeAndAfter {
 
   var linesServiceMock: LinesService = _

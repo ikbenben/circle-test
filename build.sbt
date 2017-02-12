@@ -18,3 +18,5 @@ libraryDependencies += "com.jsuereth" %% "scala-arm" % "2.0"
 
 // Adds additional packages into conf/routes
 // play.sbt.routes.RoutesKeys.routesImport += "com.ikbenben.binders._"
+
+javaOptions in Test += "-Dconfig.linesfile=dist/test.txt"
