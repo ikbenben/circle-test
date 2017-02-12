@@ -35,6 +35,7 @@ Peformance as the number of users grow could become a problem due to too many re
 # Things to change
 
 * The first request can take a long time to load for large files as this is when the code to parse the file gets invoked. It would be better to preload the data into cache during application start up and before it starts to accept requests.
+* There will be problems if multiple requests are made while the file is being cached. Could result in multiple threads trying to parse the file at the same time. Moving the code to applciation start up instead of on first request would solve this issue.
 * The cache initialization code could be updated to only parse the file if the supplied filename has changed from the last run. This would help offset the first request load time issue identified above so that it was not experienced across restarts
 * The cache initialization code could use some refactoring. See the comments in the LinesService.scala file for details
 * Using cache to store the entire contents of the file could be problematic if the number of rows in the file exceeds the cache size configuration. In this scenario, itemsitems will be expired from cache which will cause 413 exceptions when it shoudn't. Would be better to use a more persistent backend to store the entire contents such as a database.
