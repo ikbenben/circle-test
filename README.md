@@ -12,6 +12,10 @@ For simplicty, the system is using SBT to run the app but should be packaged and
 
 Scala needs to be installed and configured properly before the app will run.
 
+Clone the repository
+
+    git clone git@github.com:ikbenben/circle-test.git
+
 # How to Run
 
 Build script simply runs the unit tests
