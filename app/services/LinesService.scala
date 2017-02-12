@@ -45,7 +45,8 @@ class CachingLinesService @Inject()(cache: CacheApi) extends LinesService {
   loadData(filename)
 
   /**
-   * loads the data from the supplied file
+   * loads the data from the supplied file.
+   * Uses Scala ARM plugin to ensure file is closed after its been parsed
    */
   def loadData(filename: String) = {
     for (source <- managed(Source.fromFile(filename))) {
