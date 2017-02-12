@@ -1,49 +1,69 @@
 package services
 
-import model.Line
+import scala.io.Source
+import java.io.{FileReader, FileNotFoundException, IOException}
+import resource._
 
 import javax.inject.Inject
 
 import play.api.cache.CacheApi
 
-import scala.collection.mutable
-import scala.concurrent.duration._
+import model.Line
 
+/**
+ * service that is responsible for managing lines
+ */
 trait LinesService {
   def get(id: Long): Option[Line]
 }
 
+/**
+ * implementation of the LinesService trait that loads the lines from
+ * the supplied file and caches them using the Play CacheApi
+ *
+ * not a fan of this implementation. I don't like putting code in the constructor
+ * that initializes the state. Makes it hard to unit test properly and maintain
+ *
+ * Instead, would prefer to pull the file parsing code into its own object
+ * which then returns the lines as a list of Strings. This class would be injected
+ * into this class
+ * However this still doesn't fully address the problem of not having the cache initialization
+ * code in the constructor. I would still perfer some method that can be called during
+ * app start up that would initialize the cache.
+ *
+ * Need to review Play / Guice DI documentation to get a better understanding of app startup
+ */
 class CachingLinesService @Inject()(cache: CacheApi) extends LinesService {
 
-  println("testing injection")
+  private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
-  // TODO: initialize lines cache using file from initialization
-  /*
-  //private val books = mutable.Map(
-  //  1 -> Book(1, "Twilight"),
-  //  2 -> Book(2, "50 Shades of Grey"))
+  logger.info("initializing caching line service")
+  loadData(filename)
 
-  //private def fetchFreshLines(): Seq[Line] = {
-  //  lines.values.toSeq
-  //}
-
-  override def list: Seq[Line] = {
-    cache.getOrElse("lines") {
-      def freshLines = fetchFreshLines()
-      cache.set("lines", freshLines, 2.minutes)
-      freshLines
+  /**
+   * loads the data from the supplied file
+   */
+  def loadData(filename: String) = {
+    for (source <- managed(Source.fromFile(filename))) {
+      for ((line, index) <- source.getLines().zipWithIndex) {
+        logger.debug("adding new line to cache [index: " + index + "][text: " + line + "]")
+        cache.set(cacheKey(index), Line(index, line))
+      }
     }
   }
-  */
 
+  /**
+   * returns the line associated to the supplied incex
+   */
   override def get(index: Long): Option[Line] = {
-    Some(Line(index, "blah blah blah " + index))
-    /*
-    try {
-        Some(Integer.parseInt(in.trim))
-    } catch {
-        case e: NumberFormatException => None
-    }
-    */
+    cache.get[Line](cacheKey(index))
+  }
+
+  def filename: String = {
+    "dist/test.txt"
+  }
+
+  def cacheKey(index: Long): String = {
+    "line." + index
   }
 }

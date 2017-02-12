@@ -18,9 +18,8 @@ class LinesController @Inject()(linesService: LinesService) extends Controller {
    *
    * The configuration in the `routes` file means that this method
    * will be called when the application receives a `GET` request with
-   * a path of `/`.
+   * a path of `/lines/:index`.
    */
-
   def show(index: Long) = Action { implicit request =>
     linesService.get(index) match {
       case Some(line) => Ok(line.text)

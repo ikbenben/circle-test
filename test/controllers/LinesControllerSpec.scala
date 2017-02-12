@@ -18,9 +18,11 @@ import model.Line
  *
  *
  */
-class LinesControllerSpec extends PlaySpec with OneAppPerTest with MockitoSugar {
+class LinesControllerSpec extends PlaySpec with OneAppPerTest with MockitoSugar with BeforeAndAfter {
 
-  val linesServiceMock = mock[LinesService]
+  var linesServiceMock: LinesService = _
+  var controller: LinesController = _
+
   val lineIndex = 2
   val lineText = "test string"
 
@@ -28,10 +30,14 @@ class LinesControllerSpec extends PlaySpec with OneAppPerTest with MockitoSugar 
    * test show method to ensure returning correct values
    */
   "LinesController#show" should {
+    before {
+      linesServiceMock = mock[LinesService]
+      controller = new LinesController(linesServiceMock)
+    }
+
     "return the string associated to the supplied index" in {
       when(linesServiceMock.get(lineIndex)) thenReturn Some(Line(lineIndex, lineText))
 
-      val controller = new LinesController(linesServiceMock)
       val response = controller.show(lineIndex).apply(FakeRequest())
 
       status(response) mustBe OK
@@ -42,7 +48,6 @@ class LinesControllerSpec extends PlaySpec with OneAppPerTest with MockitoSugar 
     "return status 413 when string is not found for supplied index" in {
       when(linesServiceMock.get(lineIndex)) thenReturn None
 
-      val controller = new LinesController(linesServiceMock)
       val response = controller.show(lineIndex).apply(FakeRequest())
 
       status(response) mustBe 413

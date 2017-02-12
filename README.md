@@ -11,3 +11,5 @@ Changes
 - stop using a file for the source. instead store more perisstently in a database
 
 - preload data into cache before app starts
+
+- add better handling for when reading the file in case file is not found or readable
